@@ -8,10 +8,11 @@ import android.os.Bundle;
 import com.example.archpatterns.R;
 import com.example.archpatterns.pojo.MovieModel;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, MovieView {
 
     TextView movieNameTV;
     Button getMovieButton;
+    MoviePresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,16 +21,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         movieNameTV = findViewById(R.id.movieNameTV);
         getMovieButton = findViewById(R.id.getMovieButton);
         getMovieButton.setOnClickListener(this);
-    }
 
-    public MovieModel getMovieFromDB() {
-        return new MovieModel("CastAway", "10-3-2001", "Sad", "1");
+        presenter = new MoviePresenter(this);
     }
 
     @Override
     public void onClick(View view) {
         if(view.getId() == R.id.getMovieButton){
-            movieNameTV.setText(getMovieFromDB().getName());
+            presenter.getMovieName();
         }
+    }
+
+    @Override
+    public void onGetMovieName(String movieName) {
+        movieNameTV.setText(movieName);
     }
 }
