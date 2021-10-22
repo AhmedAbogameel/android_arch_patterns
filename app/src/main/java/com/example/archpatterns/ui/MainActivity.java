@@ -5,35 +5,28 @@ import android.widget.Button;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import com.example.archpatterns.R;
-import com.example.archpatterns.pojo.MovieModel;
+import com.example.archpatterns.databinding.ActivityMainBinding;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, MovieView {
+public class MainActivity extends AppCompatActivity {
 
-    TextView movieNameTV;
-    Button getMovieButton;
-    MoviePresenter presenter;
+    MovieViewModel movieViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        movieNameTV = findViewById(R.id.movieNameTV);
-        getMovieButton = findViewById(R.id.getMovieButton);
-        getMovieButton.setOnClickListener(this);
+//        setContentView(R.layout.activity_main);
 
-        presenter = new MoviePresenter(this);
+        ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+
+        movieViewModel = ViewModelProviders.of(this).get(MovieViewModel.class);
+
+        binding.setViewModel(movieViewModel);
+        binding.setLifecycleOwner(this);
+
     }
 
-    @Override
-    public void onClick(View view) {
-        if(view.getId() == R.id.getMovieButton){
-            presenter.getMovieName();
-        }
-    }
-
-    @Override
-    public void onGetMovieName(String movieName) {
-        movieNameTV.setText(movieName);
-    }
 }
